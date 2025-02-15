@@ -1,0 +1,73 @@
+Find all related to mysql
+sudo find / -type d -name "mysql" -exec ls -ld {} \;
+
+Remove old mysql 
+sudo apt-get purge mysql-server mysql-client mysql-common 
+mysql-server-core-* mysql-client-core-*
+
+apt-get remove mysql-client* mysql-server*
+apt-get remove libmysqlclient-dev libmysqlclient21
+apt-get purge mysql-community-c* mysql-server-8.0
+apt-get purge mysql-community-server
+sudo rm -rf /etc/mysql /var/lib/mysql /var/log/mysql
+sudo dpkg --purge mysql-common
+sudo apt-get remove --purge libmysqlclient21
+sudo apt-get remove --purge mysql-client-8.0 mysql-server-8.0 libmysqlclient-dev
+Additional
+
+sudo service mysql stop  #or mysqld
+sudo killall -9 mysql
+sudo killall -9 mysqld
+sudo apt-get remove --purge mysql-server mysql-client mysql-common
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo deluser -f mysql
+sudo rm -rf /var/lib/mysql
+sudo apt-get purge mysql-server-core-5.7
+sudo apt-get purge mysql-client-core-5.7
+sudo rm -rf /var/log/mysql
+sudo rm -rf /etc/mysql
+
+gem uninstall mysql2 && bundle install
+
+Ruby specific stuff:
+
+rails db:drop
+
+rails db:create
+
+rails db:migrate
+
+rails console
+
+
+Install MySQL 5.7.33 in ubuntu 22.04
+wget https://downloads.mysql.com/archives/get/p/23/file/mysql-server_5.7.33-1ubuntu18.04_amd64.deb-bundle.tar
+tar -xvf mysql-server_5.7.33-1ubuntu18.04_amd64.deb-bundle.tar
+apt update
+Install Mysql client for 5.7.33
+wget https://downloads.mysql.com/archives/get/p/23/file/libmysqlclient20_5.7.36-1ubuntu18.04_amd64.deb
+wget https://downloads.mysql.com/archives/get/p/23/file/libmysqlclient-dev_5.7.36-1ubuntu18.04_amd64.deb
+sudo dpkg -i libmysqlclient20_5.7.36-1ubuntu18.04_amd64.deb
+sudo dpkg -i libmysqlclient-dev_5.7.36-1ubuntu18.04_amd64.deb
+mysql --version
+
+apt install libaio1 libmecab2 libncurses5 -y
+sudo dpkg -i mysql-common_*.deb
+sudo dpkg -i mysql-community-client-core_*.deb
+sudo dpkg -i mysql-community-client_*.deb
+sudo dpkg -i mysql-client_*.deb
+sudo dpkg -i mysql-community-server-core_*.deb
+sudo dpkg -i mysql-community-server_*.deb
+sudo dpkg -i mysql-server_*.deb
+sudo systemctl start mysql
+
+
+Install MONGODB
+cd /tmp/
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.20.tgz
+tar -xvzf mongodb-linux-x86_64-3.2.20.tgz
+sudo mv mongodb-linux-x86_64-3.2.20 /usr/local/mongodb
+echo 'export PATH=/usr/local/mongodb/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+mongod --version

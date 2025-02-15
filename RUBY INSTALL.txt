@@ -1,0 +1,226 @@
+Dependencies:
+RUN apt-get -y install curl g++ gcc autoconf automake bison libc6-dev libffi-dev libgdbm-dev libncurses5-dev libsqlite3-dev libtool libyaml-dev make pkg-config sqlite3 zlib1g-dev libgmp-dev libreadline-dev libssl-dev libcurl4-gnutls-dev gnupg2 gawk libxml2-dev nodejs sendmail
+
+
+To run ROR application (packages need)
+rvm list  - ruby-2.0.0-p481 [ x86_64 ]
+openssl version - OpenSSL 1.0.2g  1 Mar 2016
+Mysql server&client
+mysql --version - 
+mysql  Ver 14.14 Distrib 5.7.33, for Linux (x86_64) using  EditLine wrapper
+mongo --version  - MongoDB shell version: 3.2.20
+Ruby install- openssl - mongodb- mysql
+------------------------------
+TO run
+bundle install
+rvm gemset create pcc
+rvm use ruby-2.7.6-p481@pcc --default
+RAILS_ENV=production bundle exec rake db:create
+RAILS_ENV=production bundle exec rake db:migrate
+RAILS_ENV=production bundle exec rake assets:precompile
+Additional(optional)
+rails db:create
+rails db:migrate
+rails db:drop
+rails console
+To run Node
+node new_app_socket.js
+----------------------
+openssl install
+sudo rm -rf /usr/local/openssl
+sudo rm -rf /usr/local/bin/openssl
+sudo rm -rf /usr/local/include/openssl
+sudo rm -rf /usr/local/lib/openssl
+wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz
+tar -xvzf openssl-1.0.2g.tar.gz
+cd openssl-1.0.2g
+./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl shared zlib
+make
+make install
+export PATH=/usr/local/openssl/bin:$PATH
+source ~/.bashrc
+echo "/usr/local/openssl/lib" | sudo tee /etc/ld.so.conf.d/openssl.conf
+sudo ln -sf /usr/local/openssl/bin/openssl /usr/bin/openssl
+openssl version
+------------------
+MYSQL Install
+find all old mysql files/dir & remove
+find / -type d -name "mysql" -exec ls -ld {} \;
+sudo apt-get remove --purge mysql-server mysql-client mysql-common
+apt-get purge mysql-server mysql-client mysql-common 
+mysql-server-core-* mysql-client-core-*
+apt-get remove mysql-client* mysql-server*
+apt-get remove libmysqlclient-dev libmysqlclient21
+apt-get purge mysql-community-c* mysql-server-8.0
+apt-get purge mysql-community-server
+sudo rm -rf /etc/mysql /var/lib/mysql /var/log/mysql
+sudo dpkg --purge mysql-common
+sudo apt-get remove --purge libmysqlclient21
+sudo apt-get remove --purge mysql-client-8.0 mysql-server-8.0 libmysqlclient-dev
+sudo service mysql stop
+sudo killall -9 mysql
+sudo killall -9 mysqld
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo deluser -f mysql
+sudo rm -rf /var/lib/mysql
+sudo apt-get purge mysql-server-core-5.7
+sudo apt-get purge mysql-client-core-5.7
+sudo rm -rf /var/log/mysql
+sudo rm -rf /etc/mysql
+gem uninstall mysq2
+
+Install MySQL 5.7.33 in ubuntu 22.04
+wget https://downloads.mysql.com/archives/get/p/23/file/mysql-server_5.7.33-1ubuntu18.04_amd64.deb-bundle.tar
+tar -xvf mysql-server_5.7.33-1ubuntu18.04_amd64.deb-bundle.tar
+apt update
+Install Mysql client for 5.7.33
+wget https://downloads.mysql.com/archives/get/p/23/file/libmysqlclient20_5.7.36-1ubuntu18.04_amd64.deb
+wget https://downloads.mysql.com/archives/get/p/23/file/libmysqlclient-dev_5.7.36-1ubuntu18.04_amd64.deb
+sudo dpkg -i libmysqlclient20_5.7.36-1ubuntu18.04_amd64.deb
+sudo dpkg -i libmysqlclient-dev_5.7.36-1ubuntu18.04_amd64.deb
+mysql --version
+
+apt install libaio1 libmecab2 libncurses5 -y
+sudo dpkg -i mysql-common_*.deb
+sudo dpkg -i mysql-community-client-core_*.deb
+sudo dpkg -i mysql-community-client_*.deb
+sudo dpkg -i mysql-client_*.deb
+sudo dpkg -i mysql-community-server-core_*.deb
+sudo dpkg -i mysql-community-server_*.deb
+sudo dpkg -i mysql-server_*.deb
+sudo systemctl start mysql
+---------------------
+MongoDB install
+In container - docker run -d --name mongo-container -p 27017:27017 mongo:4.4.29
+Update above command IP in config/mongoid.yml
+
+sudo apt-get install -y libcurl4-openssl-dev liblzma-dev
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.20.tgz
+tar -xvzf mongodb-linux-x86_64-3.2.20.tgz
+sudo mv mongodb-linux-x86_64-3.2.20 /usr/local/mongodb
+sudo mkdir -p /data/db
+sudo mkdir -p /var/log/mongodb
+sudo chown -R mongodb:mongodb /data/db /var/log/mongodb
+sudo vi /etc/systemd/system/mongodb.service
+
+[Unit]
+Description=MongoDB Database Server
+Documentation=https://docs.mongodb.org/manual
+After=network.target
+
+[Service]
+User=mongodb
+ExecStart=/usr/local/mongodb/bin/mongod --config /etc/mongod.conf
+PIDFile=/var/run/mongodb/mongod.pid
+LimitNOFILE=64000
+TimeoutSec=300
+Restart=always
+WorkingDirectory=/data/db
+
+[Install]
+WantedBy=multi-user.target
+
+vi /etc/mongod.conf
+
+systemLog:
+  destination: file
+  path: /var/log/mongodb/mongod.log
+  logAppend: true
+
+storage:
+  dbPath: /data/db
+  journal:
+    enabled: true
+
+net:
+  bindIp: 127.0.0.1
+  port: 27017
+  
+sudo systemctl daemon-reload
+systemctl enable mongodb
+systemctl start mongodb
+systemctl status mongodb
+
+If above not working
+cd /tmp/
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.20.tgz
+tar -xvzf mongodb-linux-x86_64-3.2.20.tgz
+sudo mv mongodb-linux-x86_64-3.2.20 /usr/local/mongodb
+echo 'export PATH=/usr/local/mongodb/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+mongod --version
+--------------------------------------
+RUBY INSTALL
+
+Remove all ruby old - TO clean deletion of ror
+	rm /etc/profile.d/rvm.sh
+RVM INSTALL
+If you have rvm , install ruby (rvm install 2.7.6)
+sudo apt-get -y install build-essential zlib1g-dev libssl-dev libreadline6-dev libyaml-dev
+cd /tmp
+wget http://cache.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p481.tar.gz
+tar -xvzf ruby-2.0.0-p481.tar.gz
+cd ruby-2.0.0-p481/
+./configure --prefix=/usr/local
+make
+sudo make install
+gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+\curl -sSL https://get.rvm.io | bash -s stable
+source /etc/profile.d/rvm.sh
+
+rvm autolibs disable
+rvm get master
+rvm reload
+rvm pkg install openssl
+rvm reinstall all --force
+
+rvm install ruby-2.0.0-p481
+gem install bundler
+
+/usr/local/rvm/rubies/ruby-2.0.0-p481/bin/ruby
+/usr/local/rvm/gems/ruby-2.0.0-p481/bin/bundle
+
+rvm pkg install openssl
+
+bundler
+gem install bundler -v 1.17.3
+
+Any mysql2 gem issue
+	gem install mysql2 -v '0.3.18' -- --srcdir=/var/lib/mysql
+NOTE: rvm --> ruby --> bundler --> rails-
+-------------------------------------
+Install tools in manage- tools -rvm(ruby)
+ruby rvm(ruby version )
+rvm install 
+passenger module - apache
+
+2. copy to server
+in code "bundle install" (gems is plugin)
+
+3. DB (MySQL)
+ruby max required redis
+MySQL and mongo 
+
+4.UI
+passenger (gem interlink with apache) 
+-------------------------------------------------------------
+REDIS redis 5.0.7
+sudo apt-get remove --purge -y redis-server redis-tools
+rm -rf /etc/redis /var/lib/redis /var/log/redis
+apt-get install -y build-essential tcl wget
+wget http://download.redis.io/releases/redis-5.0.7.tar.gz
+tar xzf redis-5.0.7.tar.gz
+cd redis-5.0.7
+make
+sudo make install
+make test
+mkdir /etc/redis
+cp redis.conf /etc/redis
+vi /etc/redis/redis.conf
+cp utils/redis_init_script /etc/init.d/redis_6379
+update-rc.d redis defaults
+service redis start
+
+
+
